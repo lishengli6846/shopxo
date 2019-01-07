@@ -2,13 +2,9 @@
 .DS_Store
 .ide
 *.log
-Runtime
-Temp
-temp
-Logs
-logs
 *.lock
-#Upload
-#upload
 .tea
-AppMini/New/*
+.htaccess
+route.php
+*payment_*_respond.php
+*payment_*_notify.php

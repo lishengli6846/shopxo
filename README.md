@@ -1,12 +1,15 @@
 # ShopXO 国内领先企业级B2C免费开源电商系统！
 * 求实进取、创新专注、自主研发、国内领先企业级B2C电商系统解决方案。
-* 遵循Apache2开源协议发布。
+* 遵循Apache2开源协议发布，并提供免费使用。
 * PC+WAP、支付宝小程序、微信小程序、百度小程序。
 
 ### 传送门
 * 官网地址：http://shopxo.net/
 * 演示地址：http://demo.shopxo.net/ （管理账户/密码可进入官网查看）
 * 支付宝小程序：http://shopxo.net/alipay.html
+
+### 安装教程
+* v1.2.0安装教程：https://ask.shopxo.net/article/5
 
 ### 官方QQ群
 * 群号：833531593
@@ -18,7 +21,7 @@
 * 腾讯云开发者：https://dev.tencent.com/u/gongfuxiang/p/shopxo/git
 
 ### 扩展性
-* 支持多语言，独立模块式开发，完善的注释，易扩展。
+* 独立模块式开发，完善的注释，易扩展。
 
 ### 安全性
 * 防止sql注入，代码高安全性。
@@ -26,7 +29,7 @@
 ### 轻量级，高性能
 * 支持多数据库，读写分离，高并发，内置缓存机制。
 
-# 后端基于ThinkPHP v3.2.3
+# 后端基于ThinkPHP v5.1
 ThinkPHP是一个快速、简单的基于MVC和面向对象的轻量级PHP开发框架，遵循Apache2开源协议发布，从诞生以来一直秉承简洁实用的设计原则，在保持出色的性能和至简的代码的同时，尤其注重开发体验和易用性，并且拥有众多的原创功能和特性，为WEB应用开发提供了强有力的支持。
 
 # 前端基于AmazeUI v2.7.2
@@ -40,64 +43,66 @@ ThinkPHP是一个快速、简单的基于MVC和面向对象的轻量级PHP开发
 # 项目结构
 ```
 shopxo
-├─README.md         README文件
-├─changelog.txt     更新日志
-├─core.php                      入口公共文件
-├─index.php                     前端入口文件
-├─admin.php                     后端入口文件
-├─api.php                       API入口文件
-├─alipay_life_notify.php        支付宝生活号异步接口入口文件
-├─apayment_*.php                支付模块异步/同步入口文件
-├─robots.txt                    爬虫规则定义文件
-├─composer.json                 Composer定义文件
-├─AppMini                       小程序目录
-│  └─Old                        小程序源码包
-│     ├─alipay                      支付宝小程序
-│     ├─baidu                       百度小程序
-│     └─wechat                      微信小程序
-├─Application                   应用目录
-│  ├─Admin                      后端目录
-│  │  ├─Common                      应用函数目录
-│  │  ├─Conf                        应用配置目录
-│  │  ├─Lang                        应用语言包目录
-│  │  ├─Controller                  应用控制器目录
-│  │  ├─Model                       应用模型目录
-│  │  └─View                        应用视图目录
-│  │     └─Default                      默认模板目录
-│  ├─Home                       前端目录
-│  │  ├─Common                      应用函数目录
-│  │  ├─Conf                        应用配置目录
-│  │  ├─Lang                        应用语言包目录
-│  │  ├─Controller                  应用控制器目录
-│  │  ├─Model                       应用模型目录
-│  │  └─View                        应用视图目录
-│  │     └─Default                      默认模板目录
-│  └─Api                           API目录
-│     ├─Common                      应用函数目录
-│     ├─Conf                        应用配置目录
-│     ├─Lang                        应用语言包目录
-│     ├─Controller                  应用控制器目录
-│     ├─Model                       应用模型目录
-│     └─View                        应用视图目录
-│        └─Default                      默认模板目录
-├─Service                       服务层
-├─Library                       类库
-│     ├─Payment                     支付模块目录
-│     └─Qrcode                      二维码类库
-│─Common                        公共函数配置目录
-│     ├─Common                      公共方法目录
-│     └─Conf                        公共配置目录
-│─Runtime                       临时文件目录
-├─Public                        资源文件目录
-│  ├─Admin                          后端静态资源目录
-│  │  └─Default                         默认模板目录
-│  ├─Home                           前端静态资源目录
-│  │  └─Default                         默认模板目录
-│  ├─Common                         公共静态资源目录
-│  └─Upload                         用户上传附件资源目录
-├─Rsakeys                       密钥存放目录
-├─Install                       安装引导目录
-└─ThinkPHP                      框架目录
+www  WEB部署目录（或者子目录）
+├─application           应用目录
+│  ├─common             公共模块目录（可以更改）
+│  ├─module_name        模块目录
+│  │  ├─common.php      模块函数文件
+│  │  ├─controller      控制器目录
+│  │  ├─model           模型目录
+│  │  ├─view            视图目录
+│  │  └─ ...            更多类库目录
+│  │
+│  ├─command.php        命令行定义文件
+│  ├─common.php         公共函数文件
+│  └─tags.php           应用行为扩展定义文件
+│
+├─config                应用配置目录
+│  ├─module_name        模块配置目录
+│  │  ├─database.php    数据库配置
+│  │  ├─cache           缓存配置
+│  │  └─ ...            
+│  │
+│  ├─app.php            应用配置
+│  ├─cache.php          缓存配置
+│  ├─cookie.php         Cookie配置
+│  ├─database.php       数据库配置
+│  ├─log.php            日志配置
+│  ├─session.php        Session配置
+│  ├─template.php       模板引擎配置
+│  └─trace.php          Trace配置
+│
+├─route                 路由定义目录
+│  ├─route.php          路由定义
+│  └─...                更多
+│
+├─public                WEB目录（对外访问目录）
+│  ├─index.php          入口文件
+│  ├─router.php         快速测试文件
+│  └─.htaccess          用于apache的重写
+│
+├─thinkphp              框架系统目录
+│  ├─lang               语言文件目录
+│  ├─library            框架类库目录
+│  │  ├─think           Think类库包目录
+│  │  └─traits          系统Trait目录
+│  │
+│  ├─tpl                系统模板目录
+│  ├─base.php           基础定义文件
+│  ├─console.php        控制台入口文件
+│  ├─convention.php     框架惯例配置文件
+│  ├─helper.php         助手函数文件
+│  ├─phpunit.xml        phpunit配置文件
+│  └─start.php          框架入口文件
+│
+├─extend                扩展类库目录
+├─runtime               应用的运行时目录（可写，可定制）
+├─vendor                第三方类库目录（Composer依赖库）
+├─build.php             自动生成定义文件（参考）
+├─composer.json         composer 定义文件
+├─LICENSE.txt           授权说明文件
+├─README.md             README 文件
+├─think                 命令行入口文件
 ```
 
 # 功能简介
