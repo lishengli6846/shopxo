@@ -52,7 +52,7 @@ class Alipay
             'name'          => '支付宝',  // 插件名称
             'version'       => '0.0.1',  // 插件版本
             'apply_version' => '不限',  // 适用系统版本描述
-            'apply_terminal'=> ['pc','h5'], // 适用终端 默认全部 ['pc', 'h5', 'app', 'alipay', 'wechat', 'baidu']
+            'apply_terminal'=> ['pc','h5'], // 适用终端 默认全部 ['pc', 'h5', 'app', 'alipay', 'weixin', 'baidu']
             'desc'          => '适用PC+H5，即时到帐支付方式，买家的交易资金直接打入卖家支付宝账户，快速回笼交易资金。 <a href="http://www.alipay.com/" target="_blank">立即申请</a>',  // 插件描述（支持html）
             'author'        => 'Devil',  // 开发者
             'author_url'    => 'http://shopxo.net/',  // 开发者主页
@@ -194,6 +194,19 @@ class Alipay
      */
     public function Pay($params = [])
     {
+        // 参数
+        if(empty($params))
+        {
+            return DataReturn('参数不能为空', -1);
+        }
+        
+        // 配置信息
+        if(empty($this->config))
+        {
+            return DataReturn('支付缺少配置', -1);
+        }
+
+        // 手机/PC
         if(IsMobile())
         {
             $ret = $this->PayMobile($params);
@@ -283,6 +296,10 @@ class Alipay
             $value = substr($item, $npos+1, $nlen-$npos-1);
             //放入数组中
             $para_text[$key] = $value;
+        }
+        if(empty($para_text['res_data']))
+        {
+            return DataReturn('支付宝异常错误', -1);
         }
 
         $req = Xml_Array($para_text['res_data']);
@@ -379,6 +396,7 @@ class Alipay
         $result = array(
             'urlcode'   => substr($urlcode, 0, -1),
             'url'       => substr($url, 0, -1),
+            'sign'      => '',
         );
         if(!empty($this->config['key']))
         {

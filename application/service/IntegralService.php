@@ -69,6 +69,7 @@ class IntegralService
      */
     public static function UserIntegralLogListWhere($params = [])
     {
+        // 条件初始化
         $where = [];
 
         // 用户id

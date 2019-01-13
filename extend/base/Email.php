@@ -10,6 +10,8 @@
 // +----------------------------------------------------------------------
 namespace base;
 
+use phpmailer\PHPMailer;
+
 /**
  * Email驱动
  * @author   Devil
@@ -51,11 +53,8 @@ class Email
 	 */
 	private function EmailInit()
 	{
-		// 引入邮件发送类库
-		require ROOT.'extend'.DS.'phpmailer'.DS.'class.phpmailer.php';
-
 		// 建立邮件发送类  
-		$this->obj = new \phpmailer();
+		$this->obj = new PHPMailer();
 
 		// 使用smtp方式发送
 		$this->obj->IsSMTP();
@@ -81,7 +80,7 @@ class Email
 		$this->obj->FromName = MyC('common_email_smtp_send_name');
 
 		// 是否开启html格式
-		$this->obj->IsHTMlang(true);
+		$this->obj->isHTML(true);
 
 		// 设置编码
 		$this->obj->CharSet = 'utf-8';

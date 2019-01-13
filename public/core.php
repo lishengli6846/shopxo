@@ -9,38 +9,35 @@
 // | Author: Devil
 // +----------------------------------------------------------------------
 
-// 开启缓冲区
-ob_start();
-
 // 检测PHP环境
-if(version_compare(PHP_VERSION,'5.3.0','<'))  die('require PHP > 5.3.0 !');
-
-// HTTP类型
-define('__MY_HTTP__', (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ? 'http' : 'https');
-
-// 根目录
-$my_root = empty($_SERVER['SCRIPT_NAME']) ? '' : substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/')+1);
-
-define('__MY_ROOT__', defined('IS_ROOT_ACCESS') ? $my_root.'public/' : $my_root);
-
-// 项目HOST
-define('__MY_HOST__', empty($_SERVER['HTTP_HOST']) ? '' : $_SERVER['HTTP_HOST']);
-
-// 项目URL地址
-define('__MY_URL__',  empty($_SERVER['HTTP_HOST']) ? '' : __MY_HTTP__.'://'.__MY_HOST__.$my_root);
-
-// 项目public目录URL地址
-define('__MY_PUBLIC_URL__',  empty($_SERVER['HTTP_HOST']) ? '' : __MY_HTTP__.'://'.__MY_HOST__.__MY_ROOT__);
-
-// 当前页面url地址
-$request_url = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-define('__MY_VIEW_URL__', substr(__MY_URL__, 0, -1).$request_url);
+if(version_compare(PHP_VERSION,'5.5.0','<'))  die('PHP版本最低 5.5.0');
 
 // 系统版本
 define('APPLICATION_VERSION', 'v1.2.0');
 
 // 定义系统目录分隔符
 define('DS', '/');
+
+// HTTP类型
+define('__MY_HTTP__', (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ? 'http' : 'https');
+
+// 根目录
+$my_root = empty($_SERVER['SCRIPT_NAME']) ? '' : substr($_SERVER['SCRIPT_NAME'], 1, strrpos($_SERVER['SCRIPT_NAME'], '/'));
+define('__MY_ROOT__', defined('IS_ROOT_ACCESS') ? $my_root : str_replace('public'.DS, '', $my_root));
+define('__MY_ROOT_PUBLIC__', defined('IS_ROOT_ACCESS') ? DS.$my_root.'public'.DS : DS.$my_root);
+
+// 项目HOST
+define('__MY_HOST__', empty($_SERVER['HTTP_HOST']) ? '' : $_SERVER['HTTP_HOST']);
+
+// 项目URL地址
+define('__MY_URL__',  empty($_SERVER['HTTP_HOST']) ? '' : __MY_HTTP__.'://'.__MY_HOST__.DS.$my_root);
+
+// 项目public目录URL地址
+define('__MY_PUBLIC_URL__',  empty($_SERVER['HTTP_HOST']) ? '' : __MY_HTTP__.'://'.__MY_HOST__.__MY_ROOT_PUBLIC__);
+
+// 当前页面url地址
+$request_url = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+define('__MY_VIEW_URL__', substr(__MY_URL__, 0, -1).$request_url);
 
 // 系统根目录
 define('ROOT_PATH', dirname(__FILE__).DS);
@@ -57,7 +54,7 @@ define('APPLICATION', empty($_REQUEST['application']) ? 'web' : trim($_REQUEST['
 // 请求客户端 [default, ...] 默认default
 define('APPLICATION_CLIENT', empty($_REQUEST['application_client']) ? 'default' : trim($_REQUEST['application_client']));
 
-// 请求客户端 [pc, h5, alipay, wechat, baidu] 默认pc
+// 请求客户端 [pc, h5, alipay, weixin, baidu] 默认pc
 define('APPLICATION_CLIENT_TYPE', empty($_REQUEST['application_client_type']) ? 'pc' : trim($_REQUEST['application_client_type']));
 
 // 是否ajax

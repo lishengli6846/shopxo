@@ -75,7 +75,7 @@ class Common extends Controller
         ConfigService::ConfigInit();
 
         // url模式,后端采用兼容模式
-        \think\facade\Url::root(__MY_ROOT__.'index.php?s=');
+        \think\facade\Url::root(__MY_ROOT_PUBLIC__.'index.php?s=');
     }
 
 	/**
@@ -154,7 +154,8 @@ class Common extends Controller
 		if(!in_array(strtolower(request()->action()), $unwanted_power))
 		{
 			// 角色组权限列表校验
-			if(!in_array(strtolower(request()->controller().'_'.request()->action()), $this->power))
+			$power = empty($this->power) ? [] : $this->power;
+            if(!in_array(strtolower(request()->controller().'_'.request()->action()), $power))
 			{
                 if(IS_AJAX)
                 {

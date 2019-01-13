@@ -96,10 +96,53 @@ class User extends Common
         {
             return DataReturn('获取授权信息失败', -10);
         } else {
+            $result['gender'] = empty($result['gender']) ? 0 : ($result['gender'] == 'm') ? 2 : 1;
             $result['openid'] = $result['user_id'];
             $result['referrer']= isset($this->data_post['referrer']) ? intval($this->data_post['referrer']) : 0;
             return UserService::AuthUserProgram($result, 'alipay_openid');
         }
+    }
+
+    /**
+     * 微信小程序获取用户授权
+     * @author   Devil
+     * @blog    http://gong.gg/
+     * @version 1.0.0
+     * @date    2018-11-06
+     * @desc    description
+     */
+    public function WechatUserAuth()
+    {
+        $result = (new \base\Wechat(MyC('common_app_mini_weixin_appid'), MyC('common_app_mini_weixin_appsecret')))->GetAuthSessionKey(input('authcode'));
+        if($result !== false)
+        {
+            return DataReturn('授权登录成功', 0, $result);
+        }
+        return DataReturn('授权登录失败', -100);
+    }
+
+    /**
+     * 微信小程序获取用户信息
+     * @author   Devil
+     * @blog    http://gong.gg/
+     * @version 1.0.0
+     * @date    2018-11-06
+     * @desc    description
+     */
+    public function WechatUserInfo()
+    {
+        $result = (new \base\Wechat(MyC('common_app_mini_weixin_appid'), MyC('common_app_mini_weixin_appsecret')))->DecryptData(input('encrypted_data'), input('iv'), input('openid'));
+
+        if(is_array($result))
+        {
+            $result['nick_name'] = isset($result['nickName']) ? $result['nickName'] : '';
+            $result['avatar'] = isset($result['avatarUrl']) ? $result['avatarUrl'] : '';
+            $result['gender'] = empty($result['gender']) ? 0 : ($result['gender'] == 2) ? 1 : 2;
+            $result['openid'] = $result['openId'];
+            $result['referrer']= isset($this->data_post['referrer']) ? intval($this->data_post['referrer']) : 0;
+            return UserService::AuthUserProgram($result, 'weixin_openid');
+        }
+        return DataReturn('获取用户信息失败', -100);
     }
 
     /**

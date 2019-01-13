@@ -90,7 +90,7 @@ class OrderService
         }
 
         // 回调地址
-        $url = __MY_PUBLIC_URL__.'payment_order_'.strtolower($payment[0]['payment']);
+        $url = __MY_URL__.'payment_order_'.strtolower($payment[0]['payment']);
 
         // url模式, pathinfo模式下采用自带url生成url, 避免非index.php多余
         if(MyC('home_seo_url_model', 0) == 0)
@@ -98,21 +98,22 @@ class OrderService
             $call_back_url = $url.'_respond.php';
         } else {
             $call_back_url = MyUrl('index/order/respond', ['paymentname'=>$payment[0]['payment']]);
+            if(stripos($call_back_url, '?') !== false)
+            {
+                $call_back_url = $url.'_respond.php';
+            }
         }
-
-        // 开放平台用户penid
-        $temp_key = APPLICATION_CLIENT_TYPE.'_openid';
-        $user_openid = isset($params['user'][$temp_key]) ? $params['user'][$temp_key] : '';
 
         // 发起支付
         $pay_data = array(
+            'user'          => $params['user'],
             'out_user'      => md5($params['user']['id']),
-            'user_openid'   => $user_openid,
             'order_no'      => $order['order_no'],
             'name'          => '订单支付',
             'total_price'   => $order['total_price'],
             'notify_url'    => $url.'_notify.php',
             'call_back_url' => $call_back_url,
+            'site_name'     => MyC('home_seo_site_title', 'ShopXO', true),
         );
         $pay_name = 'payment\\'.$payment[0]['payment'];
         $ret = (new $pay_name($payment[0]['config']))->Pay($pay_data);
@@ -142,7 +143,7 @@ class OrderService
 
             return $ret;
         }
-        return DataReturn('支付接口异常', -1);
+        return DataReturn(empty($ret['msg']) ? '支付接口异常' : $ret['msg'], -1);
     }
 
     /**
@@ -451,7 +452,6 @@ class OrderService
         // 条件初始化
         $where = [
             ['is_delete_time', '=', 0],
-            ['user_is_delete_time', '=', 0],
         ];
 
         // id
@@ -459,11 +459,17 @@ class OrderService
         {
             $where[] = ['id', '=', intval($params['id'])];
         }
-
-        // 用户id
-        if(!empty($params['user']))
+        
+        // 用户类型
+        if(isset($params['user_type']) && $params['user_type'] == 'user')
         {
-            $where[] = ['user_id', '=', $params['user']['id']];
+            $where[] = ['user_is_delete_time', '=', 0];
+
+            // 用户id
+            if(!empty($params['user']))
+            {
+                $where[] = ['user_id', '=', $params['user']['id']];
+            }
         }
 
         if(!empty($params['keywords']))
@@ -1352,6 +1358,50 @@ class OrderService
         } else {
             return DataReturn('订单有误，没有找到相关商品', -100);
         }
+    }
+
+    /**
+     * 支付状态校验
+     * @author   Devil
+     * @blog    http://gong.gg/
+     * @version 1.0.0
+     * @date    2019-01-08
+     * @desc    description
+     * @param   [array]          $params [输入参数]
+     */
+    public static function OrderPayCheck($params = [])
+    {
+        // 请求参数
+        $p = [
+            [
+                'checked_type'      => 'empty',
+                'key_name'          => 'order_no',
+                'error_msg'         => '订单号有误',
+            ],
+            [
+                'checked_type'      => 'empty',
+                'key_name'          => 'user',
+                'error_msg'         => '用户信息有误',
+            ],
+        ];
+        $ret = ParamsChecked($params, $p);
+        if($ret !== true)
+        {
+            return DataReturn($ret, -1);
+        }
+
+        // 获取订单状态
+        $where = ['order_no'=>$params['order_no'], 'user_id'=>$params['user']['id']];
+        $order = Db::name('Order')->where($where)->field('id,pay_status')->find();
+        if(empty($order))
+        {
+            return DataReturn('订单不存在', -400, ['url'=>__MY_URL__]);
+        }
+        if($order['pay_status'] == 1)
+        {
+            return DataReturn('支付成功', 0, ['url'=>MyUrl('index/order/detail', ['id'=>$order['id']])]);
+        }
+        return DataReturn('支付中', -300);
     }
 
 }

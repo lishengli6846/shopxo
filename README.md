@@ -6,7 +6,8 @@
 ### 传送门
 * 官网地址：http://shopxo.net/
 * 演示地址：http://demo.shopxo.net/ （管理账户/密码可进入官网查看）
-* 支付宝小程序：http://shopxo.net/alipay.html
+* 支付宝小程序：http://shopxo.net/alipay.html （已发布）
+* 微信小程序：http://shopxo.net/ （已发布）
 
 ### 安装教程
 * v1.2.0安装教程：https://ask.shopxo.net/article/5
@@ -39,6 +40,15 @@ ThinkPHP是一个快速、简单的基于MVC和面向对象的轻量级PHP开发
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;相比国外框架，Amaze UI 关注中文排版，根据用户代理调整字体，实现更好的中文排版效果；兼顾国内主流浏览器及 App 内置浏览器兼容支持。
 ##### 轻量级，高性能
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amaze UI 面向 HTML5 开发，使用 CSS3 来做动画交互，平滑、高效，更适合移动设备，让 Web 应用更快速载入。
+
+# 小程序图片展示（微信、支付宝）
+![小程序](https://images.gitee.com/uploads/images/2019/0111/104727_fb5ce133_488475.jpeg "xcx-1500.jpg")
+
+# PC端图片展示
+![电脑端](https://images.gitee.com/uploads/images/2019/0111/104442_0a307119_488475.gif "1547174456822.gif")
+
+# 后台管理图片展示
+![后台管理](https://images.gitee.com/uploads/images/2019/0111/104511_63926cf8_488475.gif "1547174286447.gif")
 
 # 项目结构
 ```
